@@ -1,4 +1,4 @@
-Lambda: ( lambda ( ID ) * ) <Expr> | <Lambda> )
-Application: ( <Lambda> | <Application> {Expr | Lambda}) | (let ((id <Expr> | <Lambda>)*) <Expr> | <Lambda>)
+fLambda: ( lambda ( ID ) * ) <Expr> | <fLambda> )
+Application: ( <fLambda> | <Application> {Expr | <fLambda>}) | (let ((id <Expr> | <fLambda>)*) <Expr> | <fLambda>)
 Addition: ( + ( <Expr> ) * )
 Expr: <Application> | <Addition> | ID | number
