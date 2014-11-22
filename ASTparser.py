@@ -1,6 +1,26 @@
 import sys
 from tokenizer import *
-from Node import Node
+
+class Node():
+    
+    def __init__(self, tok_type, tok_value):
+        self.tok_type = tok_type
+        self.tok_value = tok_value
+        self.children = []
+        
+    def add_child(self, child):
+        self.children.append(child)
+        
+    def print_tree(self, depth):
+        
+        for child in self.children:
+            str = ""
+            for i in range (depth):
+                str += "\t" 
+            str += child.tok_value
+            print(str)
+            if child is not None:
+                child.print_tree(depth+1)
 
 class ASTParser():
 
