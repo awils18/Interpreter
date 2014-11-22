@@ -10,6 +10,7 @@ class Token():
             self.isIdentifier: "ID",
             self.isNumber: "number",
             self.isSymbol: "symbol",
+            self.isMeta: "meta"
         }
         if value == '$$':
             self.type = 'EOF'
@@ -20,7 +21,7 @@ class Token():
 
     def getType(self,token):
         # loop through all functions, return the corresponding number for the first function that returns True
-        for func in [self.isLambda, self.isIdentifier, self.isNumber, self.isSymbol]:
+        for func in [self.isLambda, self.isIdentifier, self.isNumber, self.isSymbol, self.isMeta]:
             if func(token):
                 return self.type_dict[func]
         return None
@@ -57,7 +58,10 @@ class Token():
         return t == 'lambda'
 
     def isSymbol(self,token):
-        return token in ['(',')']
+        return token in ['(',')','+','-','*','/']
+
+    def isMeta(self, token):
+        return token[:2] == "//" or token[0] == '#'
 
 class Tokenizer():
 
@@ -91,6 +95,16 @@ class Tokenizer():
             else:
                 next_char = self.current_line[i+1]  # otherwise, get value of next char
 
+            # if we reach comment, read until newline or just through entire rest of the list
+            if char+next_char == '//' or char == '#':
+                for j in range(i,len(self.current_line)):
+                    if self.current_line[j] == '\n':
+                        self.current_index = len(self.current_line)
+                        return Token(current_token)
+                    current_token += self.current_line[j]
+                self.current_index = len(self.current_line)
+                return Token(current_token)
+
             current_token += char # add character to current token
 
             if self.isSymbol(char) or self.isSymbol(next_char) or next_char in [' ','\n','\t']:
@@ -98,5 +112,5 @@ class Tokenizer():
                 return Token(current_token)
 
     def isSymbol(self,token):
-        return token in ['(',')']
+        return token in ['(',')','+','-','*','/']
 
