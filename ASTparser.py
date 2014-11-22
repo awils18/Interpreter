@@ -2,7 +2,7 @@ import sys
 from tokenizer import *
 from Node import Node
 
-class Parser():
+class ASTParser():
 
     def __init__(self, file):
         self.debug = False
@@ -11,6 +11,7 @@ class Parser():
         self.consume_token()
         self.expression_trees = []
         self.statement_count = 0
+        self.lambda_list()
 
     def consume_token(self):
         self.input_token = self.tokenizer.next_token()
@@ -328,7 +329,6 @@ class Parser():
 
 file = sys.argv[1]
 p = Parser(file)
-p.lambda_list()
 count = 1
 for tree in p.expression_trees:
     print("AST Tree for Statement %s:" % count)
