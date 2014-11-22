@@ -49,14 +49,13 @@ class ASTParser():
             print("EXPLORING lambda_list")
         if self.input_token.value == '(':
             self.statement_count += 1
-            #print('PARSING Statement #%s:' % self.statement_count)
 
             lambda_expression_node = Node('func','lambda expression')
             self.lambda_expression(lambda_expression_node)
             self.expression_trees.append(lambda_expression_node)
 
-            #print('-------- SUCCESS! --------\n')
             self.lambda_list()
+
         elif self.input_token.value == '$$':
             pass
         else:
@@ -89,10 +88,11 @@ class ASTParser():
 
             parent_node.add_child(Node('Right Parenthesis', ')'))
             self.match(')', func='lambda_expression_tail')
+
         elif self.input_token.value == '(' or self.input_token.type == 'ID':
-            left_node = Node('func','left')
-            self.left(left_node)
-            parent_node.add_child(left_node)
+            head_node = Node('func','head')
+            self.head(head_node)
+            parent_node.add_child(head_node)
 
             tail_node = Node('func','tail')
             self.tail(tail_node)
@@ -144,6 +144,7 @@ class ASTParser():
             params_list_node = Node('func','params_list')
             self.params_list(params_list_node)
             parent_node.add_child(params_list_node)
+
         elif self.input_token.value == ')':
             pass
         else:
@@ -186,10 +187,11 @@ class ASTParser():
 
             parent_node.add_child(Node('Right Parenthesis',')'))
             self.match(')', func='expression_tail')
+
         elif self.input_token.value == '(' or self.input_token.type == 'ID':
-            left_node = Node('func','left')
-            self.left(left_node)
-            parent_node.add_child(left_node)
+            head_node = Node('func','head')
+            self.head(head_node)
+            parent_node.add_child(head_node)
 
             tail_node = Node('func','tail')
             self.tail(tail_node)
@@ -197,6 +199,7 @@ class ASTParser():
 
             parent_node.add_child(Node('Right Parenthesis',')'))
             self.match(')', func='expression_tail')
+
         else:
             self.parse_error('expression_tail')
 
@@ -215,9 +218,9 @@ class ASTParser():
         parent_node.add_child(Node('Left Parenthesis','('))
         self.match('(', func='application')
 
-        left_node = Node('func','left')
-        self.left(left_node)
-        parent_node.add_child(left_node)
+        head_node = Node('func','head')
+        self.head(head_node)
+        parent_node.add_child(head_node)
 
         tail_node = Node('func','tail')
         self.tail(tail_node)
@@ -226,28 +229,29 @@ class ASTParser():
         parent_node.add_child(Node('Right Parenthesis',')'))
         self.match(')', func='fLambda')
 
-    def left(self, parent_node):
+    def head(self, parent_node):
         if self.debug:
-            print("EXPLORING left")
+            print("EXPLORING head")
         if self.input_token.value == '(':
             parent_node.add_child(Node('Left Parenthesis','('))
-            self.match('(', func='left')
+            self.match('(', func='head')
 
-            application_left_node = Node('func','application_left')
-            self.application_left(application_left_node)
-            parent_node.add_child(application_left_node)
+            application_head_node = Node('func','application_head')
+            self.application_head(application_head_node)
+            parent_node.add_child(application_head_node)
+
         elif self.input_token.type == 'ID':
             parent_node.add_child(Node('ID',self.input_token.value))
-            self.match_type('ID','left')
+            self.match_type('ID','head')
         else:
-            self.parse_error('left')
+            self.parse_error('head')
 
-    def application_left(self, parent_node):
+    def application_head(self, parent_node):
         if self.debug:
-            print("EXPLORING application_left")
+            print("EXPLORING application_head")
         if self.input_token.value == 'lambda':
             parent_node.add_child(Node('Lambda','lambda'))
-            self.match('lambda', func='application_left')
+            self.match('lambda', func='application_head')
 
             params_node = Node('func','params')
             self.params(params_node)
@@ -258,20 +262,22 @@ class ASTParser():
             parent_node.add_child(expression_node)
 
             parent_node.add_child(Node('Right Parenthesis',')'))
-            self.match(')', func='application_left')
+            self.match(')', func='application_head')
+
         elif self.input_token.value == '(' or self.input_token.type == 'ID':
-            left_node = Node('func','left')
-            self.left(left_node)
-            parent_node.add_child(left_node)
+            head_node = Node('func','head')
+            self.head(head_node)
+            parent_node.add_child(head_node)
 
             tail_node = Node('func','tail')
             self.tail(tail_node)
             parent_node.add_child(tail_node)
 
             parent_node.add_child(Node('Right Parenthesis',')'))
-            self.match(')', func='application_left')
+            self.match(')', func='application_head')
+
         else:
-            self.parse_error('application_left')
+            self.parse_error('application_head')
 
     def tail(self, parent_node):
         if self.debug:
@@ -279,9 +285,11 @@ class ASTParser():
         if self.input_token.type == 'ID':
             parent_node.add_child(Node('ID',self.input_token.value))
             self.match_type('ID', 'tail')
+
         elif self.input_token.type == 'number':
             parent_node.add_child(Node('number',self.input_token.value))
             self.match_type('number', 'tail')
+
         elif self.input_token.value == '(':
             parent_node.add_child(Node('Left Parenthesis','('))
             self.match('(', func='tail')
@@ -289,6 +297,7 @@ class ASTParser():
             application_tail_node = Node('func','application_tail')
             self.application_tail(application_tail_node)
             parent_node.add_child(application_tail_node)
+
         else:
             self.parse_error('tail')
 
@@ -310,6 +319,7 @@ class ASTParser():
 
             parent_node.add_child(Node('Right Parenthesis',')'))
             self.match(')', func='application_tail')
+
         elif self.input_token.value == 'lambda':
             parent_node.add_child(Node('Lambda','lambda'))
             self.match('lambda', func='application_tail')
@@ -324,11 +334,12 @@ class ASTParser():
 
             parent_node.add_child(Node('Right Parenthesis',')'))
             self.match(')', func='application_tail')
+
         else:
             self.parse_error('application_tail')
 
 file = sys.argv[1]
-p = Parser(file)
+p = ASTParser(file)
 count = 1
 for tree in p.expression_trees:
     print("AST Tree for Statement %s:" % count)
