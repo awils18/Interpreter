@@ -4,11 +4,12 @@ from tokenizer import *
 class Parser():
 
     def __init__(self, file):
-        self.debug = True
+        self.debug = False
         self.tokenizer = Tokenizer(file)
         self.input_token = None
         self.consume_token()
-        self.lambda_count = 0
+        self.statement_count = 0
+        self.statement_tokens = []
 
     def consume_token(self):
         self.input_token = self.tokenizer.next_token()
@@ -29,6 +30,7 @@ class Parser():
             if self.input_token.value == expected_token:
                 if self.debug:
                     print("MATCHED '%s' from %s" % (self.input_token.value,kwargs['func']))
+                self.statement_tokens.append(self.input_token)
                 self.consume_token()
             else:
                 self.parse_error(kwargs['func'])
@@ -37,17 +39,26 @@ class Parser():
         if self.input_token.type == expected_type:
             if self.debug:
                 print("MATCHED '%s' from %s" % (self.input_token.value,func))
+            if self.input_token.type != 'meta':
+                self.statement_tokens.append(self.input_token)
             self.consume_token()
         else:
             self.parse_error(func)
+
+    def output_statement(self):
+        for t in self.statement_tokens:
+            print(t.value + ' ', end='')
+        print()
+        self.statement_tokens = []
 
     def lambda_list(self):
         if self.debug:
             print("EXPLORING lambda_list")
         if self.input_token.value == '(':
-            self.lambda_count += 1
-            print('PARSING Lambda Statement #%s:' % self.lambda_count)
-            self.fLambda()
+            self.statement_count += 1
+            print('PARSING Statement #%s:' % self.statement_count)
+            self.lambda_expression()
+            self.output_statement()
             print('-------- SUCCESS! --------\n')
             self.lambda_list()
         elif self.input_token.value == '$$':
@@ -55,13 +66,32 @@ class Parser():
         else:
             self.parse_error('lambda_list')
 
-    def fLambda(self):
+    def lambda_expression(self):
         if self.debug:
-            print("EXPLORING fLambda")
-        self.match('(','lambda', func='fLambda')
+            print("EXPLORING lambda_expression")
+        self.match('(', func='lambda_expression')
+        self.lambda_expression_tail()
+
+    def lambda_expression_tail(self):
+        if self.debug:
+            print("EXPLORING lambda_expression_tail")
+        if self.input_token.value == 'lambda':
+            self.match('lambda', func='lambda_expression_tail')
+            self.params()
+            self.expression()
+            self.match(')', func='lambda_expression_tail')
+        elif self.input_token.value == '(' or self.input_token.type == 'ID':
+            self.head()
+            self.tail()
+            self.match(')', func='lambda_expression_tail')
+
+    def lambda_func(self):
+        if self.debug:
+            print("EXPLORING lambda_func")
+        self.match('(','lambda', func='lambda_func')
         self.params()
         self.expression()
-        self.match(')',func='fLambda')
+        self.match(')',func='lambda_func')
 
     def params(self):
         if self.debug:
@@ -143,7 +173,7 @@ class Parser():
             self.params()
             self.expression()
             self.match(')', func='application_head')
-        elif self.input_token.value == '(':
+        elif self.input_token.value == '(' or self.input_token.type == 'ID':
             self.head()
             self.tail()
             self.match(')', func='application_head')
@@ -155,6 +185,8 @@ class Parser():
             print("EXPLORING tail")
         if self.input_token.type == 'ID':
             self.match_type('ID', 'tail')
+        elif self.input_token.type == 'number':
+            self.match_type('number', 'tail')
         elif self.input_token.value == '(':
             self.match('(', func='tail')
             self.application_tail()
@@ -176,8 +208,6 @@ class Parser():
             self.match(')', func='application_tail')
         else:
             self.parse_error('application_tail')
-
-
 
 file = sys.argv[1]
 p = Parser(file)

@@ -6,3 +6,5 @@
 
 (lambda (a b c d e)
 	(+ a (+ b (+ c (+ d e)))))
+
+((lambda (x) (+ x x)) 17)
