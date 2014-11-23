@@ -17,7 +17,7 @@ class Node():
             str = ""
             for i in range (depth):
                 str += "\t" 
-            str += child.tok_value
+            str += child.value
             print(str)
             if child is not None:
                 child.print_tree(depth+1)
@@ -147,9 +147,9 @@ class ASTParser():
         parent_node.add_child(Node('ID',self.input_token.value))
         self.match_type('ID', 'params')
 
-        params_list_node = Node('func','params_list')
-        self.params_list(params_list_node)
-        parent_node.add_child(params_list_node)
+        #params_list_node = Node('func','params_list')
+        #self.params_list(params_list_node)
+        #parent_node.add_child(params_list_node)
 
         parent_node.add_child(Node('Right Parenthesis',')'))
         self.match(')', func='params')
@@ -358,8 +358,8 @@ class ASTParser():
         else:
             self.parse_error('application_tail')
 
-file = sys.argv[1]
-p = ASTParser(file)
+#file = sys.argv[1]
+p = ASTParser("testlambda.txt")
 count = 1
 for tree in p.expression_trees:
     print("AST Tree for Statement %s:" % count)

@@ -6,8 +6,9 @@ class Evaluator():
     mArray = ['','']
     
     # Return true if x is a function (Lx.x)
-    def isFunc(x):
-        if x[1] == 'L' and x[2].isalpha() and x[3] == '.':
+    def isFunc(self, x):
+        print x
+        if x[1].type == "Lambda":
             return True
         return False
     
@@ -38,40 +39,41 @@ class Evaluator():
         mArray[1] = str2
     
     # Evaluate the expression the Lambda function M and return reduction
-    def evalFunc(M):
-        if M.isdigit():
-            return M
-        elif M.isalpha():
-            return env[M]
-        elif isFunc(M):
-            return M[2]
-        else:
-            
-            seperateApplication(M)
-            v = evalFunc(mArray[1])
-            f = evalFunc(mArray[0])
+    def evalNodeArray(self, M):
+        for child in M:
+            print child.value        
+        if M[0].type in ["number", "id"]:
+            return Node(M[0].type, M[0].value)
+        elif M[1].value == "lambda":
+            return Node(M[3].type, M[3].value)
+        elif M[1].value == "head" and M[2].value == "tail":
+            v = self.evalNodeArray(M[2])
+            f = self.evalNodeArray(M[1])
             env[f] = v
-            return v
-        
-    def processTree(node, depth):
+            return Node("number", v)
+        else:
+            print "FUCKs"
+
+    def processTree(self, node):
         
         nodeArray = []
         for child in node.children:
-            if child is not None:
-                if child.type == "func":
-                    nodeArray.append(processTree(child, depth+1))
-                else:
-                    nodeArray.append(child.value)
+            if child.type == "func":
+                nodeArray.append(self.processTree(child))
+            else:
+                nodeArray.append(child)
         
-        return evalTree(''.join(nodeArray))
+      
+        return self.evalNodeArray(nodeArray)
                  
                  
 
     
 
 parser = ASTParser("testlambda.txt")
+evaluator = Evaluator()
 for tree in parser.expression_trees:
-    processTree(tree, 0)
+    evaluator.processTree(tree)
     
     
     
