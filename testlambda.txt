@@ -1,4 +1,5 @@
 (lambda (x) (+ x y))
+
 (lambda (x y) (* x y))
 
 (lambda (x)
@@ -8,3 +9,5 @@
 	(+ a (+ b (+ c (+ d e)))))
 
 ((lambda (x) (+ x x)) 17)
+
+#((lambda (x) x) ((lambda (x) x) 5))

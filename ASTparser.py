@@ -17,7 +17,7 @@ class Node():
             str = ""
             for i in range (depth):
                 str += "\t" 
-            str += child.tok_value
+            str += child.value
             print(str)
             if child is not None:
                 child.print_tree(depth+1)
@@ -98,9 +98,14 @@ class ASTParser():
             parent_node.add_child(Node('Lambda', 'lambda'))
             self.match('lambda', func='lambda_expression_tail')
 
-            params_node = Node('func','params')
-            self.params(params_node)
-            parent_node.add_child(params_node)
+            parent_node.add_child(Node('Left Parenthesis','('))
+            self.match('(', func='params')
+
+            parent_node.add_child(Node('ID',self.input_token.value))
+            self.match_type('ID', 'params')
+
+            parent_node.add_child(Node('Right Parenthesis',')'))
+            self.match(')', func='params')
 
             expression_node = Node('func','expression')
             self.expression(expression_node)
@@ -137,38 +142,6 @@ class ASTParser():
 
         parent_node.add_child(Node('Right Parenthesis',')'))
         self.match(')',func='lambda_func')
-
-    def params(self, parent_node):
-        if self.debug:
-            print("EXPLORING params")
-        parent_node.add_child(Node('Left Parenthesis','('))
-        self.match('(', func='params')
-
-        parent_node.add_child(Node('ID',self.input_token.value))
-        self.match_type('ID', 'params')
-
-        params_list_node = Node('func','params_list')
-        self.params_list(params_list_node)
-        parent_node.add_child(params_list_node)
-
-        parent_node.add_child(Node('Right Parenthesis',')'))
-        self.match(')', func='params')
-
-    def params_list(self, parent_node):
-        if self.debug:
-            print("EXPLORING params_list")
-        if self.input_token.type == 'ID':
-            parent_node.add_child(Node('ID',self.input_token.value))
-            self.match_type('ID', func='params_list')
-
-            params_list_node = Node('func','params_list')
-            self.params_list(params_list_node)
-            parent_node.add_child(params_list_node)
-
-        elif self.input_token.value == ')':
-            pass
-        else:
-            self.parse_error('params_list')
 
     def expression(self, parent_node):
         if self.debug:
