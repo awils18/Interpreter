@@ -25,7 +25,7 @@ class Evaluator():
         # The case of + 5 5) operations
         elif M[0].type == "operator":
             if M[1].type == "number" and M[2].type == "number":
-                opstr = M[1].value + M[0].value +  M[2].value
+                opstr = str(M[1].value) + str(M[0].value) +  str(M[2].value)
                 return [Node("number", eval(opstr))]
             return M
         
