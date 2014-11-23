@@ -4,8 +4,8 @@ from tokenizer import *
 class Node():
     
     def __init__(self, tok_type, tok_value):
-        self.tok_type = tok_type
-        self.tok_value = tok_value
+        self.type = tok_type
+        self.value = tok_value
         self.children = []
         
     def add_child(self, child):
