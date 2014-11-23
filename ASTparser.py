@@ -257,7 +257,7 @@ class ASTParser():
         parent_node.add_child(tail_node)
 
         parent_node.add_child(Node('Right Parenthesis',')'))
-        self.match(')', func='fLambda')
+        self.match(')', func='application')
 
     def head(self, parent_node):
         if self.debug:
@@ -361,6 +361,19 @@ class ASTParser():
             expression_node = Node('func','expression')
             self.expression(expression_node)
             parent_node.add_child(expression_node)
+
+            parent_node.add_child(Node('Right Parenthesis',')'))
+            self.match(')', func='application_tail')
+
+        elif self.input_token.value == '(':
+
+            head_node = Node('func','head')
+            self.head(head_node)
+            parent_node.add_child(head_node)
+
+            tail_node = Node('func','tail')
+            self.tail(tail_node)
+            parent_node.add_child(tail_node)
 
             parent_node.add_child(Node('Right Parenthesis',')'))
             self.match(')', func='application_tail')

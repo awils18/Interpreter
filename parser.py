@@ -206,6 +206,10 @@ class Parser():
             self.params()
             self.expression()
             self.match(')', func='application_tail')
+        elif self.input_token.value == '(':
+            self.head()
+            self.tail()
+            self.match(')',func='application_tail')
         else:
             self.parse_error('application_tail')
 
