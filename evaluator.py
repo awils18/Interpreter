@@ -27,6 +27,7 @@ class Evaluator():
             if M[1].type == "number" and M[2].type == "number":
                 opstr = M[1].value + M[0].value +  M[2].value
                 return [Node("number", eval(opstr))]
+            return M
         
         # The case of (lambda (x) x)
         elif M[1].value == "lambda":
@@ -59,16 +60,54 @@ class Evaluator():
        
         # The case of meaningless characters to be appended
         else:
-            return M
-
+            return 
+        
+    def createTree(self, node):
+        nodeArray = []
+                
+        #Loop through tree and build linear array
+        for child in node.children:
+            if child.type == "func":
+                nodeArray.extend(self.createTree(child))
+            else:
+                nodeArray.append(child)  
+                
+        return nodeArray
+    
+    
+    def processArgs(self, node):
+        
+        nodeArray = self.createTree(node)
+        
+        length = len(nodeArray)
+        if nodeArray[length - 2].type == "number":
+            num = nodeArray[length-2].value
+            #print num
+            #print nodeArray[4].value
+            self.env[nodeArray[4].value] = num
+            
+            for i in range(5, len(nodeArray)):
+                if(nodeArray[i].type == "ID"):
+                    nodeArray[i].value = self.env[nodeArray[i].value]
+                    nodeArray[i].type = "number"
+            
+        #self.processTree(nodeArray[1: (length-2)])
+        for child in node.children:
+            print child.value
+        self.processTree(node)
+                
+                    
+                    
     def processTree(self, node):
         
         nodeArray = []
         for child in node.children:
-            if child.type == "func":
-                nodeArray.extend(self.processTree(child))
-            else:
-                nodeArray.append(child)
+            if child is not None:
+                if child.type == "func":
+                    #print child.children
+                    nodeArray.extend(self.processTree(child))
+                else:
+                    nodeArray.append(child)
                 
         return self.evalNodeArray(nodeArray)
                  
@@ -81,9 +120,12 @@ evaluator = Evaluator()
 for tree in parser.expression_trees:
     #for child in evaluator.env.keys():
         #print child
-    print "EVAL: " 
+    #print "EVAL: " 
     evaluation = evaluator.processTree(tree)[0]
     print evaluation.value
+    #lists = evaluator.processArgs(tree)
+    #for child in lists:
+     #   print child.value
 
     
     
