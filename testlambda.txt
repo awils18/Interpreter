@@ -1,11 +1,14 @@
 # Basic function application - 100%
-#((lambda (x) x) 5)
+((lambda (x) x) 5)
 
 # Two application functions - 100%
 #((lambda (x) x) ((lambda (y) y) 6))
 
-# Basic adddition
-(lambda (x) (+ 5 5))
+# Basic adddition - 100%
+#(lambda (x) (+ 5 5))
+
+# Basic multiplication - 100%
+(lambda (x) (* 5 5))
 
 #(lambda (x y) (* x y))
 

@@ -25,14 +25,15 @@ class Evaluator():
         # The case of + 5 5) operations
         elif M[0].type == "operator":
             if M[1].type == "number" and M[2].type == "number":
-                return [Node("number", (int(M[1].value) + int(M[2].value)))]
+                opstr = M[1].value + M[0].value +  M[2].value
+                return [Node("number", eval(opstr))]
         
         # The case of (lambda (x) x)
         elif M[1].value == "lambda":
             return [Node(M[3].type, M[3].value)]
         
         # The case of lambda (x) expr) application
-        elif M[0].value == "lambda":
+        elif M[0].value == "lambda" and M[4].type != "ID":
             v = self.evalNodeArray([M[4]])[0]
             f = self.evalNodeArray([M[2]])[0]
             self.env[f.value] = v.value
