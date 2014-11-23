@@ -1,0 +1,13 @@
+(lambda (x) 5)
+
+#(lambda (x) (+ x y))
+
+#(lambda (x y) (* x y))
+
+#(lambda (x)
+	#(* 5 (+ (exp x) (exp (- 0 x)))))
+
+#(lambda (a b c d e)
+#(+ a (+ b (+ c (+ d e)))))
+
+#((lambda (x) (+ x x)) 17)

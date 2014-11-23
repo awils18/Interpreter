@@ -143,8 +143,6 @@ class ASTParser():
         parent_node.add_child(Node('Right Parenthesis',')'))
         self.match(')',func='lambda_func')
 
-<<<<<<< HEAD
-=======
     def params(self, parent_node):
         if self.debug:
             print("EXPLORING params")
@@ -177,7 +175,6 @@ class ASTParser():
         else:
             self.parse_error('params_list')
 
->>>>>>> d54fa256b45fac0943aca0289bf1bd9697ec848e
     def expression(self, parent_node):
         if self.debug:
             print("EXPLORING expression")

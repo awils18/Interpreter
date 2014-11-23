@@ -7,7 +7,7 @@ class Evaluator():
     
     # Return true if x is a function (Lx.x)
     def isFunc(self, x):
-        print x
+        #print x
         if x[1].type == "Lambda":
             return True
         return False
@@ -40,8 +40,11 @@ class Evaluator():
     
     # Evaluate the expression the Lambda function M and return reduction
     def evalNodeArray(self, M):
+        
+        print "TESTING: "
         for child in M:
-            print child.value        
+            print child.value
+        print "***********************"
         if M[0].type in ["number", "id"]:
             return Node(M[0].type, M[0].value)
         elif M[1].value == "lambda":
