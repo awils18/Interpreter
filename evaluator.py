@@ -41,32 +41,31 @@ class Evaluator():
     # Evaluate the expression the Lambda function M and return reduction
     def evalNodeArray(self, M):
         
-        print "TESTING: "
-        for child in M:
-            print child.value
-        print "***********************"
+        if len(M) == 0:
+            return []
         if M[0].type in ["number", "id"]:
-            return Node(M[0].type, M[0].value)
+            return [Node(M[0].type, M[0].value)]
         elif M[1].value == "lambda":
-            return Node(M[3].type, M[3].value)
+            return [Node(M[3].type, M[3].value)]
         elif M[1].value == "head" and M[2].value == "tail":
+            print "FUCKKKASDAD"
             v = self.evalNodeArray(M[2])
             f = self.evalNodeArray(M[1])
             env[f] = v
-            return Node("number", v)
+            return [Node("number", v)]
         else:
-            print "FUCKs"
+           # print "FUCKs"
+            return M
 
     def processTree(self, node):
         
         nodeArray = []
         for child in node.children:
             if child.type == "func":
-                nodeArray.append(self.processTree(child))
+                nodeArray.extend(self.processTree(child))
             else:
                 nodeArray.append(child)
-        
-      
+                
         return self.evalNodeArray(nodeArray)
                  
                  
@@ -76,7 +75,13 @@ class Evaluator():
 parser = ASTParser("testlambda.txt")
 evaluator = Evaluator()
 for tree in parser.expression_trees:
-    evaluator.processTree(tree)
+    
+    for child in evaluator.env.keys():
+        print child
+    print "EVAL: " 
+    print evaluator.processTree(tree)[2].value
+
+    
     
     
     
