@@ -60,7 +60,7 @@ class Evaluator():
        
         # The case of meaningless characters to be appended
         else:
-            return 
+            return M
         
     def createTree(self, node):
         nodeArray = []
@@ -92,9 +92,11 @@ class Evaluator():
                     nodeArray[i].type = "number"
             
         #self.processTree(nodeArray[1: (length-2)])
-        for child in node.children:
-            print child.value
-        self.processTree(node)
+        #for child in node.children:
+            #print child.value
+            return self.processTree(node)
+        else:
+            return [Node("Func Decl", "Func Decl")]
                 
                     
                     
@@ -120,10 +122,12 @@ evaluator = Evaluator()
 for tree in parser.expression_trees:
     #for child in evaluator.env.keys():
         #print child
-    #print "EVAL: " 
-    evaluation = evaluator.processTree(tree)[0]
-    print evaluation.value
-    #lists = evaluator.processArgs(tree)
+    print "EVAL: " 
+    #evaluation = evaluator.processTree(tree)[0]
+    #print evaluation.value
+    lists = evaluator.processArgs(tree)[0]
+    print lists.value
+    
     #for child in lists:
      #   print child.value
 
