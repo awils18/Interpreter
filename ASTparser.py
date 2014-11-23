@@ -70,9 +70,14 @@ class ASTParser():
         if self.input_token.value == '(':
             self.statement_count += 1
 
+            head_node = Node('head','Head')
+
             lambda_expression_node = Node('func','lambda expression')
             self.lambda_expression(lambda_expression_node)
-            self.expression_trees.append(lambda_expression_node)
+            #self.expression_trees.append(lambda_expression_node)
+
+            head_node.add_child(lambda_expression_node)
+            self.expression_trees.append(head_node)
 
             self.lambda_list()
 
