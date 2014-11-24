@@ -1,0 +1,23 @@
+# Identity function application
+((lambda (x) x) 5)
+
+# Dummy adddition of 5+5
+(lambda (x) (+ 5 5))
+
+# Dummy subtraction of 10-5
+(lambda (x) (- 10 5))
+
+# Square function
+((lambda (y) (* y y)) 5)
+
+# Square root function
+((lambda (y) (/ y y)) 16)
+
+# Return double the parameter
+((lambda (x) (+ x x)) 10)
+
+# Function declaration with recursive expressions
+(lambda (a) (+ a (* a a)))
+
+# Application with complex recursive expressions
+((lambda (a) (+ a (+ 5 (+ a (+ 5 a))))) 2)

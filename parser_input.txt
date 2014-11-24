@@ -1,0 +1,23 @@
+# Identity function
+(lambda (x) x)
+
+# Identity function application
+((lambda (x) x) 5)
+
+# Square function
+(lambda (y) (* y y))
+
+# Cube function
+(lambda (y) (* y (* y y)))
+
+# Cube function 2.0
+(lambda (z) (* (* z z) z))
+
+# Cubing value 3
+((lambda (y) (* y (* y y))) 3)
+
+# Embedded lambda expressions (t + t)
+(lambda (t) (+ t ((lambda (r) (+ r r)) t)))
+
+# Embedded expressions
+(lambda (a) (+ a (+ a (+ a (+ a a)))))
