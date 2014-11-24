@@ -109,23 +109,21 @@ class Evaluator():
         return self.evalNodeArray(nodeArray)
                  
                  
-
-    
-
 parser = ASTParser("testlambda.txt")
 evaluator = Evaluator()
 for tree in parser.expression_trees:
     #for child in evaluator.env.keys():
         #print child
-    print "EVAL: " 
+    #exprValue = evaluator.createTree(tree)
+    lists = evaluator.processArgs(tree)[0]
+    
+    #exprStr = ''
+    #for child in exprValue:
+        #exprStr += str(child.value)
+    #print exprStr
+    print "Evaluation: " + str(lists.value)
     #evaluation = evaluator.processTree(tree)[0]
     #print evaluation.value
-    lists = evaluator.processArgs(tree)[0]
-    print lists.value
-    
-    #for child in lists:
-     #   print child.value
-
     
     
     
