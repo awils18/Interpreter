@@ -76,27 +76,27 @@ class Evaluator():
     
     
     def processArgs(self, node):
-        
+
+        if node.children[0].children[1].children[0].value == 'lambda':
+            return [Node("Func Decl", "Func Decl")]
+
         nodeArray = self.createTree(node)
         
         length = len(nodeArray)
-        if nodeArray[length - 2].type == "number":
-            num = nodeArray[length-2].value
-            #print num
-            #print nodeArray[4].value
-            self.env[nodeArray[4].value] = num
+        num = nodeArray[length-2].value
+        #print num
+        #print nodeArray[4].value
+        self.env[nodeArray[4].value] = num
             
-            for i in range(5, len(nodeArray)):
-                if(nodeArray[i].type == "ID"):
-                    nodeArray[i].value = self.env[nodeArray[i].value]
-                    nodeArray[i].type = "number"
+        for i in range(5, len(nodeArray)):
+            if(nodeArray[i].type == "ID"):
+                nodeArray[i].value = self.env[nodeArray[i].value]
+                nodeArray[i].type = "number"
             
         #self.processTree(nodeArray[1: (length-2)])
         #for child in node.children:
             #print child.value
-            return self.processTree(node)
-        else:
-            return [Node("Func Decl", "Func Decl")]
+        return self.processTree(node)
                 
                     
                     
