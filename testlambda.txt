@@ -2,7 +2,7 @@
 #((lambda (x) x) 5)
 
 # Two application functions - 100%
-((lambda (x) x) ((lambda (y) y) 6))
+#((lambda (x) x) ((lambda (y) y) 6))
 
 # Basic adddition - 100%
 #(lambda (x) (+ 5 5))
@@ -15,12 +15,8 @@
 
 #((lambda (x) (* x 5)) 5)
 
-#(lambda (x)
-	#(* 5 (+ (exp x) (exp (- 0 x)))))
-
-#(lambda (a b c d e)
-#(+ a (+ b (+ c (+ d e)))))
-
 #((lambda (x) (+ x x)) 17)
 
 ((lambda (a) (+ a (+ 5 (+ a (+ 5 a))))) 2)
+
+#((lambda (x) x) ((lambda ( y ) y) 6))
