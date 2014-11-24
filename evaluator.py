@@ -83,17 +83,16 @@ class Evaluator():
         nodeArray = self.createTree(node)
         
         length = len(nodeArray)
-        #if nodeArray[length - 2].type == "number":  # took this out originally
-        
-        
-        num = nodeArray[length-2].value
-        self.env[nodeArray[4].value] = num
-        
-        for i in range(5, len(nodeArray)):
-            if(nodeArray[i].type == "ID"):
-                nodeArray[i].value = self.env[nodeArray[i].value]
-                nodeArray[i].type = "number"
-        return self.processTree(node)
+        if nodeArray[length - 2].type == "number":  # took this out originally
+            num = nodeArray[length-2].value
+            self.env[nodeArray[4].value] = num
+            
+            for i in range(5, len(nodeArray)):
+                if(nodeArray[i].type == "ID"):
+                    nodeArray[i].value = self.env[nodeArray[i].value]
+                    nodeArray[i].type = "number"
+            return self.processTree(node)
+        return [Node("Omega Function", "Omega Function")]
                                   
     def processTree(self, node):
         
