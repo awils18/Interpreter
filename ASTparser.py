@@ -383,7 +383,7 @@ class ASTParser():
 if len(sys.argv) > 1:
     file = sys.argv[1]
 else:
-    file = "testlambda.txt"
+    file = "parser_input.txt"
 p = ASTParser(file)
 count = 1
 for tree in p.expression_trees:

@@ -100,22 +100,23 @@ class Evaluator():
         for child in node.children:
             if child is not None:
                 if child.type == "func":
-                    #print child.children
                     nodeArray.extend(self.processTree(child))
                 else:
                     nodeArray.append(child)
                 
         return self.evalNodeArray(nodeArray)
                  
-                 
-parser = ASTParser("testlambda.txt")
+if len(sys.argv) > 1:
+    file = sys.argv[1]
+else:
+    file = "evaluator_input.txt"              
+parser = ASTParser(file)
 evaluator = Evaluator()
 for tree in parser.expression_trees:
     #for child in evaluator.env.keys():
         #print child
     #exprValue = evaluator.createTree(tree)
     lists = evaluator.processArgs(tree)[0]
-    
     #exprStr = ''
     #for child in exprValue:
         #exprStr += str(child.value)

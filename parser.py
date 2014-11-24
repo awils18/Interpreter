@@ -215,7 +215,7 @@ class Parser():
 if len(sys.argv) > 1:
     file = sys.argv[1]
 else:
-    file = "testlambda.txt"
+    file = "parser_input.txt"
 p = Parser(file)
 
 # t = Tokenizer(file)

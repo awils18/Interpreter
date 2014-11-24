@@ -3,32 +3,36 @@ CSC254
 Homework Assignment #6
 Singularity and Lambda Calculus Interpreter 
 
-An interpreter directly executes instructions without compiling the code into assembly. This assignment focuses on constructing an interpreter to evaluate Lambda Calculus  expressions. The interpreter is constructed using a parser and an evaluator. Combining both parts allows the interpreter to take in Lambda expressions confirm the syntax and then evaluate the expressions. We will describe the LL(1) and Lambda Calculus grammars used to form the interpreter below. At the bottom of the report there are instructions that can be used to run the program.
+	An interpreter directly executes instructions without compiling the code into assembly. This assignment focuses on constructing an interpreter to evaluate Lambda Calculus  expressions. The interpreter is constructed using a parser and an evaluator. Combining both parts allows the interpreter to take in Lambda expressions confirm the syntax and then evaluate the expressions. We will describe the LL(1) and Lambda Calculus grammars used to form the interpreter below. At the bottom of the report there are instructions that can be used to run the program.
+
 	To parse lambda expressions, we first created a tokenizer that splits up the input into symbol (parentheses and operators), ID and number tokens. Meta statement tokens are also recognized by a beginning ‘#’ character to accommodate comments in the input file. We then defined an LL(1) grammar for lambda expressions:
 
-lambda list ? <lambda expression> <lambda list> | empty 
-lambda expression ?  ( <lambda expression tail>
-lambda expression tail ? lambda <params> <expression> ) | <head> <tail> )
-lambda_func ? ( lambda <params> <expression> )
-params	? ( ID )
-expression ? ID | ( <expression tail>
-expression tail ? <op> <expression> <expression> ) | <head> <tail> )
-application  ? ( <head> <tail> )
-head ? ( <application head> | ID
-application head ? lambda <params> <expression> ) | <head> <tail> )
-tail ? ID | number | ( <application tail>
-application tail ? <op> <expression> <expression> ) | lambda <params> <expression> ) | <head> <tail> )
-op ? + | - | * | /
+lambda list 		--> <lambda expression> <lambda list> | empty 
+lambda expression 	--> ( <lambda expression tail>
+lambda expression tail 	--> lambda <params> <expression> ) | <head> <tail> )
+lambda_func 		--> ( lambda <params> <expression> )
+params 			--> ( ID )
+expression 		--> ID | ( <expression tail>
+expression tail 	--> <op> <expression> <expression> ) | <head> <tail> )
+application 		--> ( <head> <tail> )
+head 			--> ( <application head> | ID
+application head 	--> lambda <params> <expression> ) | <head> <tail> )
+tail 			--> ID | number | ( <application tail>
+application tail 	--> <op> <expression> <expression> ) | lambda <params> <expression> ) | <head> <tail> )
+op 			--> + | - | * | /
 
 	Once we have this grammar defined, we simply programmed our parser based on the grammar rules. Any production rule defined in the grammar is turned into a function, any non-terminal in a rule is a call to the function of that production, and any terminal is matched (sent to the match function, where it is compared to our current token).
+
 	Once we had a working parser implemented, we decided to create another separate parser that constructs an Abstract Syntax Tree as it parses the lambda expression. To do this, we first defined a Node class, which represents a single node in the AST, containing the value of the Node and its type, as well as a list of its children Nodes. For non-terminals, the Node type is ‘func’ and the value is the name of the production rule it represents. For terminal symbols, the value is the literal value of the symbol, which can be a number, ID name, +, -, /, *, (, or ).
 Every function was modified from the original parser to take in a single parameter representing its parent node (the function it was called from), so that in the function, we can add Nodes as the parent node’s children. The parser keeps a list of trees, with each element representing the AST of each lambda expression in the input file. When running this file, we loop through each tree in our list of ASTs and call each tree’s print_tree function, printing out the AST of each lambda expression given in the input file.
 	
-Evaluation Description
-	Once the Lambda expression is parsed and formed into an AST tree, the evaluator processes the tree and outputs the evaluated expression. To form the evaluator we used the basic Lambda Calculus grammar described in class and made various improvements to handle the more complex target language for Common Lisp. The evaluator takes in the AST tree and using recursive depth first search algorithms to process children nodes. Using the AST rules described above, rule nodes are used to simplify the children. Using an environment array to keep track of variable values, the evaluator makes applications from variable values to its corresponding variable in the lambda function. If there is no application to be made, the program determines a function declaration outputting the result. The evaluator assumes perfect syntax from the parser and condenses the target LISP code until an answer can be outputted. The output of the evaluator consists of a node with the final value in it. The output is then outputted to the command line.
+	Once the Lambda expression is parsed and formed into an AST tree, the evaluator processes the tree and outputs the evaluated expression. To form the evaluator we used the basic Lambda Calculus grammar described in class and made various improvements to handle the more complex target language for Common Lisp. The evaluator takes in the AST tree and using recursive depth first search algorithms to process children nodes. Using the AST rules described above, rule nodes are used to simplify the children. Using an environment dictionary to keep track of variable values, the evaluator makes applications from variable values to its corresponding variable in the lambda function. If there is no application to be made, the program determines a function declaration outputting the result. The evaluator assumes perfect syntax from the parser and condenses the target LISP code until an answer can be outputted. The output of the evaluator consists of a node with the final value in it. The output is then outputted to the command line.
 
-To Run:
+Files for Test Cases:
+	Parser (Normal and AST):	parser_input.txt
+	Evaluator:			evaluator_input.txt
 
+Run Commands:
 	Parser run command:	python3 parser.py <filename>
 	AST Parser run command:	python3 ASTparser.py <filename>
 	Evaluator run command:	python evaluator.py <filename>
