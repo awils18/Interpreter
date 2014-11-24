@@ -83,20 +83,23 @@ class Evaluator():
         nodeArray = self.createTree(node)
         
         length = len(nodeArray)
-        num = nodeArray[length-2].value
-        #print num
-        #print nodeArray[4].value
-        self.env[nodeArray[4].value] = num
+        if nodeArray[length - 2].type == "number":  # took this out originally
+            num = nodeArray[length-2].value
+            #print num
+            #print nodeArray[4].value
+            self.env[nodeArray[4].value] = num
             
-        for i in range(5, len(nodeArray)):
-            if(nodeArray[i].type == "ID"):
-                nodeArray[i].value = self.env[nodeArray[i].value]
-                nodeArray[i].type = "number"
+            for i in range(5, len(nodeArray)):
+                if(nodeArray[i].type == "ID"):
+                    nodeArray[i].value = self.env[nodeArray[i].value]
+                    nodeArray[i].type = "number"
             
         #self.processTree(nodeArray[1: (length-2)])
         #for child in node.children:
             #print child.value
-        return self.processTree(node)
+            return self.processTree(node)
+        # else:
+        #     return [Node("Func Decl", "Func Decl")]
                 
                     
                     
