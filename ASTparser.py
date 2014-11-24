@@ -74,7 +74,6 @@ class ASTParser():
 
             lambda_expression_node = Node('func','lambda expression')
             self.lambda_expression(lambda_expression_node)
-            #self.expression_trees.append(lambda_expression_node)
 
             head_node.add_child(lambda_expression_node)
             self.expression_trees.append(head_node)
@@ -164,21 +163,21 @@ class ASTParser():
         parent_node.add_child(Node('Right Parenthesis',')'))
         self.match(')', func='params')
 
-    def params_list(self, parent_node):
-        if self.debug:
-            print("EXPLORING params_list")
-        if self.input_token.type == 'ID':
-            parent_node.add_child(Node('ID',self.input_token.value))
-            self.match_type('ID', func='params_list')
+    # def params_list(self, parent_node):
+    #     if self.debug:
+    #         print("EXPLORING params_list")
+    #     if self.input_token.type == 'ID':
+    #         parent_node.add_child(Node('ID',self.input_token.value))
+    #         self.match_type('ID', func='params_list')
 
-            params_list_node = Node('func','params_list')
-            self.params_list(params_list_node)
-            parent_node.add_child(params_list_node)
+    #         params_list_node = Node('func','params_list')
+    #         self.params_list(params_list_node)
+    #         parent_node.add_child(params_list_node)
 
-        elif self.input_token.value == ')':
-            pass
-        else:
-            self.parse_error('params_list')
+    #     elif self.input_token.value == ')':
+    #         pass
+    #     else:
+    #         self.parse_error('params_list')
 
     def expression(self, parent_node):
         if self.debug:
@@ -381,8 +380,11 @@ class ASTParser():
         else:
             self.parse_error('application_tail')
 
-#file = sys.argv[1]
-p = ASTParser("testlambda.txt")
+if len(sys.argv) > 1:
+    file = sys.argv[1]
+else:
+    file = "testlambda.txt"
+p = ASTParser(file)
 count = 1
 for tree in p.expression_trees:
     print("AST Tree for Statement %s:" % count)

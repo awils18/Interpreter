@@ -10,6 +10,7 @@ class Parser():
         self.consume_token()
         self.statement_count = 0
         self.statement_tokens = []
+        self.lambda_list()
 
     def consume_token(self):
         self.input_token = self.tokenizer.next_token()
@@ -19,10 +20,8 @@ class Parser():
     def parse_error(self,func):
         if self.debug:
             print('PARSING ERROR AT %s -- UNEXPECTED TOKEN "%s"' % (func,self.input_token.value))
-            print('TYPE == %s' % self.input_token.type)
         else:
             print('PARSING ERROR -- UNEXPECTED TOKEN "%s"' % self.input_token.value)
-            print('TYPE == %s' % self.input_token.type)
         sys.exit(1)
 
     def match(self, *args, **kwargs):
@@ -213,9 +212,11 @@ class Parser():
         else:
             self.parse_error('application_tail')
 
-file = sys.argv[1]
+if len(sys.argv) > 1:
+    file = sys.argv[1]
+else:
+    file = "testlambda.txt"
 p = Parser(file)
-p.lambda_list()
 
 # t = Tokenizer(file)
 # token = t.next_token()
